@@ -51,7 +51,7 @@ void setup() {
     delay(500);
 
     Serial.begin(115200);
-    Serial1.begin(CLIENT_BAUD, CLIENT_PARAM);
+    Serial1.begin(CLIENT_BAUD, CLIENT_PARAM, CLIENT_RXPIN, CLIENT_TXPIN);
 
     Serial.print("\n\nWiFi serial bridge client ");
     Serial.println(VERSION);
@@ -81,16 +81,23 @@ void loop() {
         if (num == BUFFERSIZE - 1) break;
     }
     if (num > 0) Serial1.write(buf, num);
-    //if (num > 0) Serial.write(buf, num);
+    if (num > 0) {
+      Serial.print("Received: ");
+      Serial.write(buf, num);
+      Serial.println("");
+    }
     num = 0;
 
     while (Serial1.available()) {
         buf[num] = Serial1.read();
-//    while (Serial.available()) {
-//        buf[num] = Serial.read();
         num++;
         if (num == BUFFERSIZE - 1) break;
     }
     if (num > 0) client.write(buf, num);
+    if (num > 0) {
+      Serial.print("Responding: ");
+      Serial.write(buf, num);
+      Serial.println("");
+    }
     num = 0;
 }

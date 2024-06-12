@@ -124,10 +124,12 @@ uint16_t iBT = 0;
                             if (i1[num] == BUFFERSIZE - 1) break;
                         }
 
-                        COM[num]->write(buf1[num], i1[num]);  // now send to UART(num):
+                        if (i1[num] > 0){
+                          COM[num]->write(buf1[num], i1[num]);  // now send to UART(num):
                         
-                        Serial.print("Octopus: ");
-                        Serial.write(buf1[num], i1[num]);  // now send to UART(num):
+                          Serial.print("Octopus: ");
+                          Serial.write(buf1[num], i1[num]);  // now send to UART(num):
+                        }
                         i1[num] = 0;
                     }
                 }
@@ -140,6 +142,7 @@ uint16_t iBT = 0;
                     }
                     Serial.print("Raspbeyry: ");
                     Serial.write(buf2[num], i2[num]);
+                    Serial.println("");
                     for (byte cln = 0; cln < MAX_NMEA_CLIENTS; cln++) {
                         if (TCPClient[num][cln])
                             TCPClient[num][cln].write(buf2[num], i2[num]);
